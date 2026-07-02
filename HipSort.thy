@@ -41,8 +41,23 @@ qed
 theorem 
   shows "sorted (HipSort l)"
     and "mset (HipSort l) = mset l"
-  sorry
+proof -
+  have "JesteHip1 (ubaciSve l 0) (length l)"
+    using ubaciSve_korektnost_hip
+    by simp
+  then have "JesteHip2 (ubaciSve l 0) (length l)"
+    using JesteHipEkvDef
+    by simp
+  then show "sorted (HipSort l)"
+    sorry (*izbaci teo1*)
 
+next
+  have "mset (ubaciSve l 0) = mset l"
+    using ubaciSve_korektnost_mset
+    by simp
+  then show "mset (HipSort l) = mset l"
+    sorry (*izbaci teo2*)
 
+qed
 
 end

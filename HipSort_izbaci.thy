@@ -41,12 +41,12 @@ fun JesteSortiran :: "int list \<Rightarrow> nat \<Rightarrow> bool" where
 
 lemma izbaciSve_inv1:
 assumes "0 < i \<and> i \<le> length l" (*?*)
-and "JesteHip l i"
+and "JesteHip2 l i"
 and "JesteSortiran l i"
 and "l ! 0 \<le> l ! i"
 and "nl = (swap l 0 (i-1))"
 
-shows "JesteHip (izbaci nl 0 (i-1)) (i-1)" 
+shows "JesteHip2 (izbaci nl 0 (i-1)) (i-1)" 
 and "JesteSortiran (izbaci nl 0 (i-1)) (i-1)"
 and "nl ! 0 \<le> nl ! (i-1)"
   sorry

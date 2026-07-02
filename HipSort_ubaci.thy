@@ -332,7 +332,7 @@ lemma ubaci_JesteHip1:
   using assms
   by auto
 
-lemma ubaci_korektnost_hip:
+lemma ubaci_korak_hip:
   assumes "SkoroHip1 l m q"
       and "q < m"
       and "m \<le> length l"
@@ -377,7 +377,7 @@ qed
 lemma ubaci_len:
   assumes "i < length l"
     shows "length (ubaci l i) = length l"
-  sorry
+  by (induction l i rule: ubaci.induct) auto
 
 lemma ubaciSve_korak_hip:
   assumes "q < length l"
@@ -397,7 +397,7 @@ proof (induction l q rule: ubaciSve.induct)
     from 1(3) have "SkoroHip1 l (i+1) i"
       by auto
     with False have p1: "JesteHip1 (ubaci l i) (i + 1)"
-      using ubaci_korektnost_hip[of l "i+1" i]
+      using ubaci_korak_hip[of l "i+1" i]
       by auto
 
     show ?thesis 
@@ -423,7 +423,8 @@ proof (induction l q rule: ubaciSve.induct)
   qed
 qed
 
-lemma ubaciSve_korektnost_hip:
+(* TEOREMA KOJU TREBA ISKORISTITI NA KRAJU *)
+theorem ubaciSve_korektnost_hip:
   shows "JesteHip1 (ubaciSve l 0) (length l)"
 proof -
   have "JesteHip1 l 0"
@@ -434,11 +435,44 @@ proof -
 qed
 
 
-lemma ubaciSve_korektnost_mset:
-assumes "i \<le> length l" (*?*)
-shows "mset l = mset (ubaci l i)"
-  unfolding swap_def
-  sorry
+lemma ubaci_korak_mset:
+  assumes "i < length l"
+  shows "mset (ubaci l i) = mset l"
+  using assms
+proof (induction l i rule: ubaci.induct)
+  case (1 l i)
+  show ?case
+  proof (cases "i = 0 \<or> l ! i \<le> l ! roditelj i")
+    case True
+    then have "ubaci l i = l"
+      by auto
+    then show ?thesis
+      by auto
+  next
+    case False
+    with 1 have p1: "mset (ubaci (swap l i (roditelj i)) (roditelj i)) = mset (swap l i (roditelj i))"
+      by auto
 
+    from False have p2: "ubaci (swap l i (roditelj i)) (roditelj i) = ubaci l i"
+      by auto
+    from False have p3: "mset (swap l i (roditelj i)) = mset l"
+      using 1(2) mset_swap[of i l "roditelj i"]
+      by auto
+
+    from p1 p2 p3 show ?thesis
+      by auto
+  qed
+qed
+  
+lemma ubaciSve_korak_mset:
+  shows "mset (ubaciSve l i) = mset l"
+  using ubaci_korak_mset
+  by (induction l i rule: ubaciSve.induct) auto
+
+(* TEOREMA KOJU TREBA ISKORISTITI NA KRAJU *)
+theorem ubaciSve_korektnost_mset:
+  shows "mset (ubaciSve l 0) = mset l"
+  using ubaciSve_korak_mset
+  by  auto
 
 end

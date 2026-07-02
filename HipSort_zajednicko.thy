@@ -1,5 +1,5 @@
 theory HipSort_zajednicko
-  imports Main "HOL-Library.Discrete_Functions" "HOL-Library.Multiset"
+  imports Main (*"HOL-Library.Discrete_Functions"*) "HOL-Library.Multiset"
 begin
 
 definition swap :: "'a list \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> 'a list" where
@@ -14,8 +14,10 @@ fun levo :: "nat \<Rightarrow> nat" where
 fun desno :: "nat \<Rightarrow> nat" where
   "desno i = 2*i + 2"
 
+(*
 fun dubina :: "nat \<Rightarrow> nat" where
   "dubina i = floor_log (i+1)"
+*)
 
 lemma mset_swap[simp]: 
 assumes "i < length l"
