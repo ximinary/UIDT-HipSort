@@ -23,6 +23,7 @@ fun NajveciZbirSegmentaGS :: "int list \<Rightarrow> int" where
 fun NajveciPoslednjiZbirSegmentaGS :: "int list \<Rightarrow> int" where
 "NajveciPoslednjiZbirSegmentaGS l = Max (set (map sum_list (suffixes l)))"
 
+
 lemma maximum_map_plus:
   fixes n::int
   assumes "s \<noteq> {}"
@@ -30,6 +31,15 @@ lemma maximum_map_plus:
   shows "Max ((\<lambda> s. s + n) ` s) = Max s + n"
   by (smt (verit, best) assms(1,2) hom_Max_commute max_def)
 
+lemma maximum_union:
+  fixes n::int
+  assumes "s1 \<noteq> {}" 
+  and "s2 \<noteq> {}"
+  and "finite s1"
+  and "finite s2"
+  shows "Max (s1 \<union> s2) = max (Max s1) (Max s2)"
+  using assms Max.union
+  by blast
 
 lemma max_nsuffixes:
   fixes n::int
@@ -56,19 +66,8 @@ proof -
     .
 qed
 
-
 lemma nsublists: "(set (sublists (lst @ [n]))) = (set (sublists lst) \<union> set (suffixes (lst @ [n])))"
   by (induct lst) auto
-
-lemma maximum_union:
-  fixes n::int
-  assumes "s1 \<noteq> {}" 
-  and "s2 \<noteq> {}"
-  and "finite s1"
-  and "finite s2"
-  shows "Max (s1 \<union> s2) = max (Max s1) (Max s2)"
-  using assms Max.union
-  by blast
 
 lemma max_nsublists:
   fixes n::int
@@ -104,6 +103,14 @@ lemma novi_el:
   shows "(take (i + 1) l) = (take i l) @ [l ! i]"  
     using assms take_Suc_conv_app_nth
     by auto
+
+lemma NZS_0:
+  shows "NajveciZbirSegmentaGS (take 0 l) = 0" 
+  by auto
+
+lemma NPZS_0:
+  shows "NajveciPoslednjiZbirSegmentaGS (take 0 l) = 0"
+  by auto
 
 lemma NZS_iteracija:
   assumes "i < length l"
@@ -177,6 +184,7 @@ theorem NajveciZbirSegmenta'_korektnost:
   shows "NajveciZbirSegmenta' l 0 0 0 = NajveciZbirSegmentaGS l"
 proof - 
   have "invarianta l 0 0 0"
+    using NZS_0 NPZS_0
     by auto
   then show ?thesis
     using NajveciZbirSegmenta'_korak[of l 0 0 0]

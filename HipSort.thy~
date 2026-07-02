@@ -285,40 +285,22 @@ proof -
   from assms(5) have swap3: "\<forall>x. x < m \<and> x \<noteq> q \<and> x \<noteq> roditelj q \<longrightarrow> nl!x = l!x" 
     unfolding swap_def
     by auto
-  have swap4: "\<forall>x. x < m \<and> x \<noteq> 0 \<and> x \<noteq> levo (roditelj q) \<and> x \<noteq> desno (roditelj q) \<and> x \<noteq> levo q \<and> x \<noteq> desno q
+  have swap4: "\<forall>x. x < m \<and> x \<noteq> q \<and> x \<noteq> levo q \<and> x \<noteq> desno q
                              \<longrightarrow> nl!roditelj x = l!roditelj x" 
   proof 
     fix x
-    show "x < m \<and> x \<noteq> 0 \<and> x \<noteq> levo (roditelj q) \<and> x \<noteq> desno (roditelj q) \<and> x \<noteq> levo q \<and> x \<noteq> desno q \<longrightarrow> nl ! roditelj x = l ! roditelj x"
+    show "x < m \<and> x \<noteq> q \<and> x \<noteq> levo q \<and> x \<noteq> desno q \<longrightarrow> nl ! roditelj x = l ! roditelj x"
     proof 
-      assume a: "x < m \<and> x \<noteq> 0 \<and> x \<noteq> levo (roditelj q) \<and> x \<noteq> desno (roditelj q) \<and> x \<noteq> levo q \<and> x \<noteq> desno q"
+      assume a: " x < m \<and> x \<noteq> q \<and> x \<noteq> levo q \<and> x \<noteq> desno q"
 
-      from a have a1: "x < m" by auto
-      from a have a2: "x \<noteq> 0" by auto
-      from a have a3: "x \<noteq> levo (roditelj q)" by auto
-      from a have a4: "x \<noteq> desno (roditelj q)" by auto
-      from a have a5: "x \<noteq> levo q" by auto
-      from a have a6: "x \<noteq> desno q" by auto
-
-      from assms(2) have a3': "roditelj q = roditelj (levo (roditelj q))"
-        by auto
-      from assms(2) have a4': "roditelj q = roditelj (desno (roditelj q))"
-        by auto
-      from assms(2) have a5': "q = roditelj (levo q)"
-        by auto
-      from assms(2) have a6': "q = roditelj (desno q)"
+      from assms(2) have "q = roditelj (levo q)"
         by auto
 
-      from a2 a3 a4 a3' a4' have a34: "roditelj x \<noteq> roditelj q"
-        by simp
 
-      from a2 a5 a6 a5' a6' have a56: "roditelj x \<noteq> q"
-        by simp
-
-      from a1 a2 a34 a56 show "nl ! roditelj x = l ! roditelj x"
-        using swap3
-        by simp
-    qed
+      with a have "x < m \<and> x \<noteq> q \<and> x \<noteq> roditelj q"
+    then show ?thesis
+      using swap3
+      
   qed
     
 
@@ -359,7 +341,7 @@ proof -
   from assms(4) swap1 swap2 have tv3: "nl!roditelj q \<ge> nl!q"
     by auto
 
-  (* ostaju iste sve grane ciji cvore ne swap-ujemo -- svetlo zelene grane *)
+  (* ostaju iste sve grane ciji cvore ne swap-ujemo -- svetlo zelene grane           from tv1 swap3 assms(5) *)
   have tv4: "\<forall>i \<in> {1..<m} - {roditelj q, levo (roditelj q), desno (roditelj q), levo q, desno q}. nl!roditelj i \<ge> nl!i"
   proof
     fix i
@@ -368,8 +350,8 @@ proof -
       by auto
 
     have at3: "l!roditelj i = nl!roditelj i"
-      using swap4 at1
-      by simp
+      using assms(2, 5) swap3 swap_def at1
+      sorry
 
     from at1 swap3 have at4: "l!i = nl!i"
       by auto
@@ -379,7 +361,9 @@ proof -
   qed
 
   (* grana od (roditelj q) do drugog deteta ako postoje to dete -- plava grana *)
-  (* dokaz tvrdjena -- obicne grane + novi podrzavajuci uslov (narandzaste grane) *)
+  
+
+  (* dokaz tvrdjena -- obicne grane + novi podrzavajuci uslov (narandjaste grane) *)
 
   from assms(2) have "q = levo (roditelj q) \<or> q =  desno (roditelj q)"
     by auto
@@ -392,7 +376,7 @@ proof -
     proof 
       assume aL_bezD: "q = m - 1"
 
-      have "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
+      have plb: "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
       proof
         assume "roditelj q \<noteq> 0"
         from aL aL_bezD assms(3) have plb1: "\<not>(desno (roditelj q) < m) \<and> (levo (roditelj q) < m)"
@@ -410,28 +394,12 @@ proof -
         with plb1 aL show "najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
           by simp
       qed
-      then have plb_nar: "roditelj q = 0 \<or> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-        by metis
 
-      have "\<forall>i \<in> {1..<m} - {roditelj q, q}. nl!roditelj i \<ge> nl!i"
-      proof -
-        from aL_bezD have "levo q \<ge> m"
-          by simp
-        moreover from aL_bezD have "desno q \<ge> m"
-          by simp
-        moreover from aL aL_bezD have "levo (roditelj q) = q"
-          by simp
-        moreover from aL aL_bezD have "desno (roditelj q) = m"
-          by simp
-        ultimately show ?thesis
-          using tv4
-          by auto
-      qed
-
-      with plb_nar tv3 show ?thesis
-        by auto
+      with show ?thesis
+        sorry
     next
       assume aL_saD: "q < m - 1"
+
 
       have podrz: "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
         sorry
@@ -648,7 +616,7 @@ proof -
 qed
 
 
-lemma ubaciSve_korektnost_mset:
+lemma ubaciSve_inv2:
 assumes "i \<le> length l" (*?*)
 shows "mset l = mset (ubaci l i)"
   unfolding swap_def
@@ -667,7 +635,7 @@ and "JesteSortiran (izbaci nl 0 (i-1)) (i-1)"
 and "nl ! 0 \<le> nl ! (i-1)"
   sorry
 
-lemma izbaciSve_korektnost_mset:
+lemma izbaciSve_inv2:
 assumes "0 < i \<and> i \<le> length l" (*?*)
 shows "mset l = mset (izbaci (swap l 0 (i-1)) 0 (i-1))"
   unfolding swap_def 
