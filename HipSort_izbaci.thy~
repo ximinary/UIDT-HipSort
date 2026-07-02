@@ -8,9 +8,7 @@ function izbaci :: "int list \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> i
          else izbaci (swap l i najveci) najveci m))"
   by pat_completeness auto
 termination
-  using swap_len
-  by (relation "measure (\<lambda>(l, i, m). (m - i))") (auto simp add: if_split)
-
+  sorry
 
 fun izbaciSve :: "int list \<Rightarrow> nat \<Rightarrow> int list" where
 "izbaciSve l i = (if i = 0 then l else izbaciSve (izbaci (swap l 0 (i-1)) 0 (i-1)) (i-1))"

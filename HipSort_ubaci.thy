@@ -9,11 +9,17 @@ fun ubaci :: "int list \<Rightarrow> nat \<Rightarrow> int list" where
     else
        ubaci (swap l i (roditelj i)) (roditelj i))"
 
+lemma ubaci_len:
+  assumes "i < length l"
+    shows "length (ubaci l i) = length l"
+  by (induction l i rule: ubaci.induct) auto
+
 function ubaciSve :: "int list \<Rightarrow> nat \<Rightarrow> int list" where
 "ubaciSve l i = (if i \<ge> length l then l else ubaciSve (ubaci l i) (i+1))"
   by pat_completeness auto
 termination
-  sorry
+  using ubaci_len
+  by (relation "measure (\<lambda>(l, i). (length l - i))") auto
 
 
 fun najveci3roditelj :: "int list \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> nat" where
@@ -394,11 +400,6 @@ proof (induction l q rule: ubaci.induct)
       by auto
   qed    
 qed
-
-lemma ubaci_len:
-  assumes "i < length l"
-    shows "length (ubaci l i) = length l"
-  by (induction l i rule: ubaci.induct) auto
 
 lemma ubaciSve_korak_hip:
   assumes "q < length l"

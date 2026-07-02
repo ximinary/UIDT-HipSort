@@ -91,7 +91,6 @@ fun najveci3 :: "int list \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> nat"
 
 
 
-
 lemma l2to1:
   assumes "0 < i"
   and "i < m"
