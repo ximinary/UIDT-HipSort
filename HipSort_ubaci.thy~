@@ -86,10 +86,19 @@ proof -
       from a have a5: "x \<noteq> levo q" by auto
       from a have a6: "x \<noteq> desno q" by auto
 
-      from assms(2) a2 a3 a4 have a34: "roditelj x \<noteq> roditelj q"
+      from assms(2) have a3': "roditelj q = roditelj (levo (roditelj q))"
+        by auto
+      from assms(2) have a4': "roditelj q = roditelj (desno (roditelj q))"
+        by auto
+      from assms(2) have a5': "q = roditelj (levo q)"
+        by auto
+      from assms(2) have a6': "q = roditelj (desno q)"
+        by auto
+
+      from a2 a3 a4 a3' a4' have a34: "roditelj x \<noteq> roditelj q"
         by simp
 
-      from assms(2) a2 a5 a6 have a56: "roditelj x \<noteq> q"
+      from a2 a5 a6 a5' a6' have a56: "roditelj x \<noteq> q"
         by simp
 
       from a1 a2 a34 a56 show "nl ! roditelj x = l ! roditelj x"
@@ -210,139 +219,109 @@ proof -
     next
       assume aL_saD: "q < m - 1"
 
+      have podrz: "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
+        sorry
 
-      from aL aL_saD have pls5: "q + 1 < m"
-        by auto
-      from aL have pls6: "desno (roditelj q) = q + 1"
-        by auto
-      from tv1 pls5 have "l ! roditelj (q + 1) \<ge> l ! (q + 1)"
-        by force
-      with aL pls6 rod_desno_rod have "l ! roditelj q \<ge> l ! (q + 1)"
-        by metis
-      with pls5 swap1 swap3 have "nl ! q \<ge> nl ! (q + 1)"
-        by auto
-      with pls6 have pls7: "nl ! q \<ge> nl ! (desno (roditelj q))"
-        by auto
-
-
-      have "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-        proof
-        assume "roditelj q \<noteq> 0"
-        from aL aL_saD assms(3) have pls1: "desno (roditelj q) < m"
-          by auto
-        with assms(2) have "roditelj q < q"
-          by auto
-        with \<open>roditelj q \<noteq> 0\<close> assms(3) tv1 have pls2: "l ! roditelj (roditelj q) \<ge> l ! roditelj q"
-          by simp
-        have "l ! roditelj (roditelj q) = nl ! roditelj (roditelj q)"
-          using \<open>roditelj q \<noteq> 0\<close> assms(5) swap3 swap_def
-          by (smt (verit, del_insts) Suc_le_eq diff_Suc_1 diff_le_self div_less div_less_dividend less_Suc_eq_0_disj
-              linorder_not_less nat_less_le nth_list_update_neq one_add_one plus_1_eq_Suc roditelj.simps)
-        with swap1 pls2 have pls4: "nl ! roditelj (roditelj q) \<ge> nl ! q"
-          by simp
-
-        
-        from pls7 pls4 have "nl ! roditelj (roditelj q) \<ge> nl ! (desno (roditelj q))"
-          by simp
-        with pls4 pls6 show "najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-          by simp
-      qed
-      then have pls_nar: "roditelj q = 0 \<or> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-        by metis
-
-      from pls7 tv3 have pls_plav: "nl ! desno (roditelj q) \<le> nl ! roditelj q"
-        by auto
-
-      have "\<forall>i \<in> {1..<m} - {roditelj q}.  nl ! i \<le> nl ! roditelj i"
-      proof
-        fix i
-        assume a: "i \<in> {1..<m} - {roditelj q}"
-        from tv4 have "i \<in> {1..<m} - {roditelj q, levo (roditelj q), desno (roditelj q), levo q, desno q} \<longrightarrow>  nl ! i \<le> nl ! roditelj i"
-          by auto
-        moreover from tv3 aL have "nl ! (levo (roditelj q)) \<le> nl ! roditelj (levo (roditelj q))"
-          by auto
-        moreover from pls_plav have "nl ! (desno (roditelj q)) \<le> nl ! roditelj (desno (roditelj q))"
-          by auto
-        moreover from tv2'' have "levo q \<ge> m \<or> nl ! (levo q) \<le> nl ! roditelj (levo q)"
-          by auto
-        moreover from tv2'' have "desno q \<ge> m \<or> nl ! (desno q) \<le> nl ! roditelj (desno q)"
-          by auto
-        ultimately have "i \<in> {1..<m} - {roditelj q} \<longrightarrow>  nl ! i \<le> nl ! roditelj i"
-          by auto
-        with a show "nl ! i \<le> nl ! roditelj i"
-          by metis
-      qed
-      with pls_nar show ?thesis
-        by simp
+      show ?thesis
+        sorry
     qed
   next
     assume aD: "q = desno (roditelj q)"
-    from assms(3) have pd5: "q - 1 < m"
-      by auto
-    from aD have pd6: "levo (roditelj q) = q - 1"
-      by auto
-    from assms(2) aD have pd': "q \<ge> 2"
-      by auto
-    with tv1 pd5 have "l ! roditelj (q - 1) \<ge> l ! (q - 1)"
-      by fastforce
-    with aD pd6 rod_levo_rod have "l ! roditelj q \<ge> l ! (q - 1)"
-      by metis
-    with pd' pd5 swap1 swap3 have "nl ! q \<ge> nl ! (q - 1)"
-      by auto
-    with pd6 have pd7: "nl ! q \<ge> nl ! (levo (roditelj q))"
-      by auto
 
+    have podrz: "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
+      sorry
 
-    have "roditelj q \<noteq> 0 \<longrightarrow> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-    proof
-      assume "roditelj q \<noteq> 0"
-      from aD assms(3) have pd1: "levo (roditelj q) < m"
-        by auto
-      with assms(2) have "roditelj q < q"
-        by auto
-      with \<open>roditelj q \<noteq> 0\<close> assms(3) tv1 have pd2: "l ! roditelj (roditelj q) \<ge> l ! roditelj q"
-        by simp
-      have "l ! roditelj (roditelj q) = nl ! roditelj (roditelj q)"
-        using \<open>roditelj q \<noteq> 0\<close> assms(5) swap3 swap_def
-        by (smt (verit, del_insts) Suc_le_eq diff_Suc_1 diff_le_self div_less div_less_dividend less_Suc_eq_0_disj
-            linorder_not_less nat_less_le nth_list_update_neq one_add_one plus_1_eq_Suc roditelj.simps)
-      with swap1 pd2 have pd4: "nl ! roditelj (roditelj q) \<ge> nl ! q"
-        by simp
-
-        
-      from pd7 pd4 have "nl ! roditelj (roditelj q) \<ge> nl ! (levo (roditelj q))"
-        by simp
-      with pd4 pd6 aD show "najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-        using najveci3roditelj.simps by presburger
-    qed
-    then have pd_nar: "roditelj q = 0 \<or> najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
-      by metis
-
-    from pd7 tv3 have pd_plav: "nl ! levo (roditelj q) \<le> nl ! roditelj q"
-      by auto
-
-    have "\<forall>i \<in> {1..<m} - {roditelj q}.  nl ! i \<le> nl ! roditelj i"
-    proof
-      fix i
-      assume a: "i \<in> {1..<m} - {roditelj q}"
-      from tv4 have "i \<in> {1..<m} - {roditelj q, levo (roditelj q), desno (roditelj q), levo q, desno q} \<longrightarrow>  nl ! i \<le> nl ! roditelj i"
-        by auto
-      moreover from pd_plav have "nl ! (levo (roditelj q)) \<le> nl ! roditelj (levo (roditelj q))"
-        by auto
-      moreover from tv3 aD have "nl ! (desno (roditelj q)) \<le> nl ! roditelj (desno (roditelj q))"
-        by auto
-      moreover from tv2'' have "levo q \<ge> m \<or> nl ! (levo q) \<le> nl ! roditelj (levo q)"
-        by auto
-      moreover from tv2'' have "desno q \<ge> m \<or> nl ! (desno q) \<le> nl ! roditelj (desno q)"
-        by auto
-      ultimately have "i \<in> {1..<m} - {roditelj q} \<longrightarrow>  nl ! i \<le> nl ! roditelj i"
-        by auto
-      with a show "nl ! i \<le> nl ! roditelj i"
-        by metis
-    qed
-    with pd_nar show ?thesis
-      by simp
+    show ?thesis
+      sorry
   qed
+
+
+(*
+  show "SkoroHip1 nl m (roditelj q)"
+  proof (cases "roditelj q = 0")
+    case True
+    then have "q = 1 \<or> q = 2"
+      using assms(2) mult_2 by auto
+    from True tv1 tv2'' tv3 tv4  assms(4, 5) show ?thesis
+      sorry
+      
+  next
+    case False
+    have "najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
+      sorry
+
+
+    with False tv1 swap1 swap2 assms(4, 5) show ?thesis
+      sorry
+
+  qed
+*)
+
+
+(*
+  have "najveci3roditelj nl (roditelj q) m = roditelj (roditelj q)"
+  proof (cases "2 dvd q")
+    case True
+    have "roditelj q < m"
+      using assms(3)
+      by auto
+    then have "roditelj q = najveci3 l (roditelj q) m"
+      using tv1
+  next
+    case False
+    then show ?thesis sorry
+  qed
+
+    
+
+  have "najveci3 l q m = q"
+  proof(cases "desno q < m")
+    case True
+
+    have hL: "l!q \<ge> l!(levo q)"
+    proof -
+      from True assms(3) tv1 have "l!roditelj (levo q) \<ge> l!(levo q)"
+        by fastforce
+      then show ?thesis
+         by auto
+     qed    
+
+    have hR: "l!q \<ge> l!(desno q)"
+    proof -
+      from True assms(3) tv1 have "l!roditelj (desno q) \<ge> l!(desno q)"
+        by fastforce
+      then show ?thesis
+         by auto
+    qed
+
+    from hL hR show ?thesis
+      by auto
+  next
+    case False
+    show ?thesis
+    proof (cases "levo q < m")
+      case True
+  
+      have hL: "l!q \<ge> l!(levo q)"
+      proof -
+        from True assms(3) tv1 have "l!roditelj (levo q) \<ge> l!(levo q)"
+          by fastforce
+        then show ?thesis
+           by auto
+       qed   
+      from hL False show ?thesis
+        by auto
+    next
+      case False
+      then show ?thesis
+        by auto
+    qed
+  qed
+
+  with assms(4, 5) swap1 swap2 have "najveci3roditelj nl q m = roditelj q"
+    unfolding swap_def
+    by (smt (verit, ccfv_SIG) najveci3.simps najveci3roditelj.elims nth_list_update_neq)
+*)
 qed
 
 lemma ubaci_JesteHip1:

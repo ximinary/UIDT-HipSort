@@ -1,5 +1,5 @@
 theory HipSort
-  imports Main HipSort_zajednicko HipSort_ubaci HipSort_izbaci
+  imports Main HipSort_ubaci HipSort_izbaci
 begin
 
 fun HipSort :: "int list \<Rightarrow> int list" where

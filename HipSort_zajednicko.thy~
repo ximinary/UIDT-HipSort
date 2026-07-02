@@ -18,23 +18,6 @@ fun desno :: "nat \<Rightarrow> nat" where
 fun dubina :: "nat \<Rightarrow> nat" where
   "dubina i = floor_log (i+1)"
 *)
-lemma rod_levo_rod  : shows "roditelj (levo  (roditelj q)) = roditelj q"
-  by simp
-lemma rod_desno_rod : shows "roditelj (desno (roditelj q)) = roditelj q"
-  by simp
-lemma rod_levo      : shows "roditelj (levo  q) = q"
-  by simp
-lemma rod_desno     : shows "roditelj (desno q) = q"
-  by simp
-lemma levo_rod_odd  : assumes "\<not> (2 dvd q)" shows "levo (roditelj q) = q"      
-  using assms by simp
-lemma levo_rod_even : assumes "q \<noteq> 0" and "2 dvd q" shows "levo (roditelj q) = q - 1" 
-  using assms by auto 
-lemma desno_rod_odd : assumes "\<not> (2 dvd q)" shows "desno (roditelj q) = q + 1"
-  using assms by simp
-lemma desno_rod_even: assumes "q \<noteq> 0" and "2 dvd q" shows "desno (roditelj q) = q"
-  using assms by auto
-
 
 lemma mset_swap[simp]: 
 assumes "i < length l"
